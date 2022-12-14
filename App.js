@@ -3,8 +3,9 @@ import { useState, useEffect } from "react";
 import { StyleSheet, ScrollView, View, Text } from "react-native";
 import PouchDB from "pouchdb-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Toast from "react-native-toast-message";
 import Header from "./components/Header";
-import CatagoryView from "./components/CatagoryView";
+import CatagoryView from "./components/Catagories/CatagoryView";
 
 export default function App() {
   const localDB = new PouchDB("catagories");
@@ -40,6 +41,7 @@ export default function App() {
       <View style={styles.container}>
         <Text>Welcome!</Text>
       </View>
+      <Toast />
     </>
   );
 }

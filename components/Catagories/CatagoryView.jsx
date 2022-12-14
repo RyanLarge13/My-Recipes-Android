@@ -11,24 +11,23 @@ const CatagoryView = ({ closeCatagoryView, catagories }) => {
   const closeAnimation = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    fadeIn();
-  }, [animation]);
-
-  const fadeIn = () => {
     Animated.timing(animation, {
       toValue: 1,
       duration: 1000,
       useNativeDriver: true,
     }).start();
-  };
+  }, [animation]);
 
   const fadeOut = useCallback(() => {
+    setClosing(true);
     Animated.timing(closeAnimation, {
       toValue: 0,
-      duration: 1000,
+      duration: 500,
       useNativeDriver: true,
-    });
-    closeCatagoryView(false);
+    }).start();
+    setTimeout(() => {
+      closeCatagoryView(false);
+    }, 500);
   }, [closeAnimation]);
 
   return (
@@ -43,7 +42,9 @@ const CatagoryView = ({ closeCatagoryView, catagories }) => {
         {catagories.length < 1 ? (
           <View>
             {!addCatagoryForm ? (
-              <Text>Add a new catagory with recipes!!</Text>
+              <Text style={styles.addACatagoryText}>
+                Add A New Catagory And Start Building Recipes!!
+              </Text>
             ) : (
               <CatagoryForm />
             )}
@@ -52,10 +53,14 @@ const CatagoryView = ({ closeCatagoryView, catagories }) => {
           catagories.map((catagory) => <Catagory catagory={catagory} />)
         )}
         <Pressable
-          style={styles.addCatagory}
+          style={!addCatagoryForm ? styles.addCatagory : styles.hidden}
           onPress={() => setAddCatagoryForm(true)}
         >
-          <Text style={styles.addCatagoryText}>+</Text>
+          <Text
+            style={!addCatagoryForm ? styles.addCatagoryText : styles.hidden}
+          >
+            +
+          </Text>
         </Pressable>
         <Pressable style={styles.close} onPress={fadeOut}>
           <Text style={styles.closeText}>Close</Text>
@@ -70,6 +75,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     height: "75%",
+    minHeight: 700,
     width: "100%",
     backgroundColor: "#4cc9f0",
     justifyContent: "center",
@@ -93,8 +99,14 @@ const styles = StyleSheet.create({
   closeText: {
     fontSize: 10,
   },
+  addACatagoryText: {
+    fontSize: 17,
+    fontWeight: "bold",
+    maxWidth: "60%",
+    textAlign: "center",
+  },
   addCatagory: {
-    marginTop: "5%",
+    marginTop: 25,
     paddingVertical: 2,
     paddingHorizontal: 10,
     borderRadius: 50,
@@ -103,6 +115,12 @@ const styles = StyleSheet.create({
   addCatagoryText: {
     fontSize: 20,
     fontWeight: "600",
+  },
+  hidden: {
+    display: "none",
+  },
+  toast: {
+    elevation: 100,
   },
 });
 
