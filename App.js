@@ -1,20 +1,56 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import { useState, useEffect } from "react";
+import { StyleSheet, ScrollView, View, Text } from "react-native";
+import PouchDB from "pouchdb-react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Header from "./components/Header";
+import CatagoryView from "./components/CatagoryView";
 
 export default function App() {
+  const localDB = new PouchDB("catagories");
+  const remoteDB = new PouchDB("http://localhost:5984/docs");
+  const sync = localDB.sync(remoteDB, {
+    live: true,
+    retry: true,
+  });
+
+  const [catagoryComponent, setCatagoryComponent] = useState(false);
+  const [catagories, setCatagories] = useState([]);
+
+  useEffect(() => {
+    localDB.info().then((info) => console.log(info));
+    //remoteDB.info().then((info) => console.log(info));
+  });
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <>
+      <Header
+        name="Ryan"
+        showCatagoryComponent={(bool) => setCatagoryComponent(bool)}
+      />
+      {catagoryComponent ? (
+        <CatagoryView
+          closeCatagoryView={(bool) => setCatagoryComponent(bool)}
+          catagories={catagories}
+        />
+      ) : (
+        ""
+      )}
+      <StatusBar style={styles.statusBar} />
+      <View style={styles.container}>
+        <Text>Welcome!</Text>
+      </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
+  statusBar: {
+    backgroundColor: "4cc9f0",
+  },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    marginTop: 80,
+    padding: "2%",
   },
 });
