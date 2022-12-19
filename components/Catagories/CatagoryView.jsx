@@ -1,9 +1,16 @@
 import { useRef, useState, useEffect, useCallback } from "react";
-import { Animated, View, Text, StyleSheet, Pressable } from "react-native";
+import {
+  ScrollView,
+  Animated,
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+} from "react-native";
 import Catagory from "./Catagory";
 import CatagoryForm from "./CatagoryForm";
 
-const CatagoryView = ({ closeCatagoryView, catagories }) => {
+const CatagoryView = ({ closeCatagoryView, catagories, onFindRecipes }) => {
   const [closing, setClosing] = useState(false);
   const [addCatagoryForm, setAddCatagoryForm] = useState(false);
 
@@ -13,7 +20,7 @@ const CatagoryView = ({ closeCatagoryView, catagories }) => {
   useEffect(() => {
     Animated.timing(animation, {
       toValue: 1,
-      duration: 1000,
+      duration: 250,
       useNativeDriver: true,
     }).start();
   }, [animation]);
@@ -22,13 +29,17 @@ const CatagoryView = ({ closeCatagoryView, catagories }) => {
     setClosing(true);
     Animated.timing(closeAnimation, {
       toValue: 0,
-      duration: 500,
+      duration: 250,
       useNativeDriver: true,
     }).start();
     setTimeout(() => {
       closeCatagoryView(false);
-    }, 500);
+    }, 250);
   }, [closeAnimation]);
+
+  const sendRecipes = (db) => {
+    onFindRecipes(db);
+  };
 
   return (
     <>
@@ -39,19 +50,24 @@ const CatagoryView = ({ closeCatagoryView, catagories }) => {
             : [styles.container, { opacity: closeAnimation }]
         }
       >
-        {catagories.length < 1 ? (
-          <View>
-            {!addCatagoryForm ? (
-              <Text style={styles.addACatagoryText}>
-                Add A New Catagory And Start Building Recipes!!
-              </Text>
-            ) : (
-              <CatagoryForm />
-            )}
-          </View>
-        ) : (
-          catagories.map((catagory) => <Catagory catagory={catagory} />)
-        )}
+        <View>
+          {!addCatagoryForm ? (
+            <>
+              <View style={styles.catagoryComponentContainer}>
+                {catagories.map((catagory, index) => (
+                  <Catagory
+                    key={index}
+                    catagory={catagory}
+                    filterRecipes={(db) => sendRecipes(db)}
+                  />
+                ))}
+              </View>
+              <Text style={styles.addACatagoryText}>Add A New Catagory</Text>
+            </>
+          ) : (
+            <CatagoryForm closeForm={(bool) => setAddCatagoryForm(bool)} />
+          )}
+        </View>
         <Pressable
           style={!addCatagoryForm ? styles.addCatagory : styles.hidden}
           onPress={() => setAddCatagoryForm(true)}
@@ -83,6 +99,17 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     elevation: 10,
   },
+  scrollContainer: {
+    flex: 1,
+    marginTop: 100,
+    paddingTop: 50,
+  },
+  catagoryComponentContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   close: {
     position: "absolute",
     top: "75%",
@@ -93,16 +120,16 @@ const styles = StyleSheet.create({
     width: "75%",
     borderRadius: 50,
     backgroundColor: "#f72585",
-    elevation: 75,
+    elevation: 100,
     marginTop: "25%",
   },
   closeText: {
     fontSize: 10,
   },
   addACatagoryText: {
+    marginTop: 40,
     fontSize: 17,
     fontWeight: "bold",
-    maxWidth: "60%",
     textAlign: "center",
   },
   addCatagory: {

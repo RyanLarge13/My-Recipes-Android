@@ -10,8 +10,9 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import { Camera, CameraType } from "expo-camera";
 import Toast from "react-native-toast-message";
+import PouchDB from "pouchdb-react-native";
 
-const ContactForm = () => {
+const ContactForm = ({ closeForm }) => {
   const [title, setTitle] = useState("");
   const [image, setImage] = useState(null);
 
@@ -23,9 +24,9 @@ const ContactForm = () => {
       quality: 1,
     });
 
-    console.log(result);
+    //console.log(result);
 
-    if (!result.cancelled) {
+    if (!result.canceled) {
       setImage(result.assets[0].uri);
     }
   };
@@ -40,9 +41,17 @@ const ContactForm = () => {
     });
   };
 
-  const addCatagory = () => {
+  const addCatagory = async () => {
     if (title === "") return showToast();
-    
+    const recipeDB = new PouchDB(`${title}`);
+    const localDB = new PouchDB("catagories");
+    const newCatagory = {
+      _id: title,
+      Title: title,
+      ImageUri: image,
+    };
+    await localDB.put(newCatagory);
+    closeForm(false);
   };
 
   return (
