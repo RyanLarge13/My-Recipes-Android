@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     height: 80,
     backgroundColor: "#4cc9f0",
     borderRadius: 25,
-    elevation: 25,
+    elevation: 225,
     justifyContent: "center",
     alignItems: "center",
   },

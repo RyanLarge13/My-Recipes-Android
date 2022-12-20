@@ -5,34 +5,74 @@ import {
   Text,
   Pressable,
   TextInput,
+  Image,
   StyleSheet,
 } from "react-native";
+import * as ImagePicker from "expo-image-picker";
+import { Camera, CameraType } from "expo-camera";
 
-const AddRecipeForm = ({ onAddRecipe, catagory }) => {
+const AddRecipeForm = ({ onAddRecipe, catagory, closeForm, option }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [temp, setTemp] = useState("");
   const [totalTime, setTotalTime] = useState("");
   const [ingredients, setIngredients] = useState("");
   const [instructions, setInstructions] = useState("");
+  const [image, setImage] = useState(null);
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [3, 3],
+      quality: 1,
+    });
+
+    //console.log(result);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
 
   const sendDoc = () => {
     const newRecipe = {
       _id: title,
-      Catagory: catagory, 
+      Catagory: catagory,
       Title: title,
       Desc: description,
       Temp: temp,
       TotalTime: totalTime,
       Ingredients: ingredients.split(","),
       Instructions: instructions,
+      ImageUri: image,
     };
     onAddRecipe(newRecipe);
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <Text>What is your new recipe today?</Text>
+    <View style={styles.container}>
+      <Text
+        style={{
+          fontSize: 20,
+          textAlign: "center",
+          width: "75%",
+          alignSelf: "center",
+        }}
+      >
+        What is your new recipe today?
+      </Text>
+      <Pressable style={styles.imageContainer} onPress={pickImage}>
+        {image ? (
+          <Image
+            pointerEvents="none"
+            source={{ uri: image }}
+            style={{ width: 150, height: 150, borderRadius: 50, elevation: 5 }}
+          />
+        ) : (
+          <Text style={{ textAlign: "center" }}>Select An Image</Text>
+        )}
+      </Pressable>
       <TextInput
         style={styles.input}
         autoCompleteType="text"
@@ -74,13 +114,29 @@ const AddRecipeForm = ({ onAddRecipe, catagory }) => {
       <Pressable style={styles.submit} onPress={sendDoc}>
         <Text>Submit</Text>
       </Pressable>
-    </ScrollView>
+      {option ? <Pressable style={styles.submit} onPress={closeForm}>
+        <Text>Close</Text>
+      </Pressable> : ""}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 25,
+    marginTop: 100,
+    marginBottom: 50,
+  },
+  imageContainer: {
+    marginVertical: 25,
+    paddingHorizontal: 10,
+    width: 150,
+    height: 150,
+    borderRadius: 50,
+    elevation: 5,
+    backgroundColor: "#4cc9f0",
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
   },
   input: {
     paddingHorizontal: 5,
@@ -107,6 +163,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f72585",
     justifyContent: "center",
     alignItems: "center",
+    elevation: 5,
   },
 });
 

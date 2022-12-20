@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { useState, useEffect } from "react";
-import { StyleSheet, ScrollView, View, Text } from "react-native";
+import { StyleSheet, ScrollView, View, Text, Pressable } from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome";
 import PouchDB from "pouchdb-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-toast-message";
@@ -16,6 +17,7 @@ export default function App() {
   const [title, setTitle] = useState("");
   const [recipes, setRecipes] = useState([]);
   const [showRecipe, setShowRecipe] = useState(false);
+  const [recipeForm, setRecipeForm] = useState(false);
 
   const localDB = new PouchDB("catagories");
   const remoteDB = new PouchDB("http://localhost:5984/docs");
@@ -60,6 +62,75 @@ export default function App() {
 
   return (
     <>
+      <StatusBar style={styles.statusBar} />
+      <ScrollView style={styles.container}>
+        <Text
+          style={{
+            fontSize: 20,
+            textAlign: "center",
+            marginBottom: 50,
+            marginTop: 50,
+          }}
+        >
+          {title !== "" ? title : "Welcome!"}
+        </Text>
+        {!title ? (
+          <Text style={{ fontSize: 15, textAlign: "center" }}>
+            Select a catagory
+          </Text>
+        ) : (
+          <View pointerEvents={catagoryComponent ? "none" : "auto"}>
+            {recipes.length < 1 ? (
+              <>
+                <Text style={{ fontSize: 20, textAlign: "center" }}>
+                  You have no recipes under this catagory.
+                </Text>
+                <AddRecipeForm
+                  onAddRecipe={(recipe) => findRecipesAndAdd(recipe)}
+                  catagory={title}
+                  option={false}
+                />
+              </>
+            ) : (
+              <View style={styles.scrollRecipes}>
+                {showRecipe ? (
+                  <BigRecipe
+                    onCloseClick={() => setShowRecipe(false)}
+                    recipe={showRecipe}
+                    catagory={title}
+                  />
+                ) : (
+                  recipes.map((recipe, index) => (
+                    <Recipe
+                      key={index}
+                      recipe={recipe}
+                      onShowRecipeClick={(recipe) => setShowRecipe(recipe)}
+                    />
+                  ))
+                )}
+                {recipeForm ? (
+                  <AddRecipeForm
+                    onAddRecipe={(recipe) => findRecipesAndAdd(recipe)}
+                    catagory={title}
+                    closeForm={() => setRecipeForm(false)}
+                    option={true}
+                  />
+                ) : (
+                  <Pressable
+                    style={styles.openRecipeForm}
+                    onPress={() => setRecipeForm(true)}
+                  >
+                    <Icon
+                      name="plus"
+                      style={{ alignSelf: "center", fontSize: 20 }}
+                    />
+                  </Pressable>
+                )}
+              </View>
+            )}
+          </View>
+        )}
+      </ScrollView>
       <Header
         name="Ryan"
         showCatagoryComponent={(bool) => setCatagoryComponent(bool)}
@@ -73,43 +144,6 @@ export default function App() {
       ) : (
         ""
       )}
-      <StatusBar style={styles.statusBar} />
-      <View style={styles.container}>
-        <Text>Welcome!</Text>
-        {!title ? (
-          <Text>Select a catagory</Text>
-        ) : (
-          <View pointerEvents={catagoryComponent ? "none" : "auto"}>
-            {recipes.length < 1 ? (
-              <>
-                <Text>You have no recipes under this catagory.</Text>
-                <AddRecipeForm
-                  onAddRecipe={(recipe) => findRecipesAndAdd(recipe)}
-                  catagory={title}
-                />
-              </>
-            ) : (
-              <View>
-                {showRecipe ? (
-                  <BigRecipe onCloseClick={() => setShowRecipe(false)} recipe={showRecipe} />
-                ) : (
-                  recipes.map((recipe, index) => (
-                    <Recipe
-                      key={index}
-                      recipe={recipe}
-                      onShowRecipeClick={(recipe) => setShowRecipe(recipe)}
-                    />
-                  ))
-                )}
-                <AddRecipeForm
-                  onAddRecipe={(recipe) => findRecipesAndAdd(recipe)}
-                  catagory={title}
-                />
-              </View>
-            )}
-          </View>
-        )}
-      </View>
       <Toast />
     </>
   );
@@ -121,7 +155,17 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    paddingVertical: 25,
     marginTop: 80,
     padding: "2%",
+  },
+  openRecipeForm: {
+    marginTop: 100,
+    marginBottom: 50,
+    paddingVertical: 5,
+    width: "100%",
+    borderRadius: 50,
+    backgroundColor: "#f72585",
+    elevation: 5,
   },
 });

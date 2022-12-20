@@ -59,6 +59,7 @@ const CatagoryView = ({ closeCatagoryView, catagories, onFindRecipes }) => {
                     key={index}
                     catagory={catagory}
                     filterRecipes={(db) => sendRecipes(db)}
+                    toggleView={fadeOut}
                   />
                 ))}
               </View>

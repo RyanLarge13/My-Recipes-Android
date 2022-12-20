@@ -3,24 +3,33 @@ import { View, Text, Pressable, Image, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import PouchDB from "pouchdb-react-native";
 
-const Catagory = ({ catagory, filterRecipes }) => {
+const Catagory = ({ catagory, filterRecipes, toggleView }) => {
   useEffect(() => {
     // console.log(catagory);
   }, []);
 
   const deleteCatagory = (id) => {
     const localDB = new PouchDB("catagories");
+    const recipeDB = new PouchDB(catagory);
 
     localDB
       .get(id)
       .then((doc) => localDB.remove(doc))
+      .catch((err) => console.log(err));
+
+    recipeDB
+      .destroy()
+      .then((res) => console.log(res))
       .catch((err) => console.log(err));
   };
 
   return (
     <Pressable
       style={styles.container}
-      onPress={() => filterRecipes(catagory.doc.Title)}
+      onPress={() => {
+        filterRecipes(catagory.doc.Title);
+        toggleView();
+      }}
     >
       <Image
         source={{ uri: catagory.doc.ImageUri }}
