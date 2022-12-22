@@ -84,7 +84,7 @@ const ContactForm = ({ closeForm }) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 100,
+    marginTop: 110,
     justifyContent: "center",
     alignItems: "center",
     height: "40%",

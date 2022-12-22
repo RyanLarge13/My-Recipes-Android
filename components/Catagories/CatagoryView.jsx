@@ -50,7 +50,7 @@ const CatagoryView = ({ closeCatagoryView, catagories, onFindRecipes }) => {
             : [styles.container, { opacity: closeAnimation }]
         }
       >
-        <View>
+        <ScrollView style={styles.scrollCatagories}>
           {!addCatagoryForm ? (
             <>
               <View style={styles.catagoryComponentContainer}>
@@ -63,12 +63,11 @@ const CatagoryView = ({ closeCatagoryView, catagories, onFindRecipes }) => {
                   />
                 ))}
               </View>
-              <Text style={styles.addACatagoryText}>Add A New Catagory</Text>
             </>
           ) : (
             <CatagoryForm closeForm={(bool) => setAddCatagoryForm(bool)} />
           )}
-        </View>
+        </ScrollView>
         <Pressable
           style={!addCatagoryForm ? styles.addCatagory : styles.hidden}
           onPress={() => setAddCatagoryForm(true)}
@@ -100,16 +99,17 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     elevation: 10,
   },
-  scrollContainer: {
-    flex: 1,
-    marginTop: 100,
-    paddingTop: 50,
-  },
   catagoryComponentContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
     alignItems: "center",
+    marginVertical: 20,
+  },
+  scrollCatagories: {
+    position: "absolute",
+    top: 80,
+    maxHeight: 455,
   },
   close: {
     position: "absolute",
@@ -127,14 +127,8 @@ const styles = StyleSheet.create({
   closeText: {
     fontSize: 10,
   },
-  addACatagoryText: {
-    marginTop: 40,
-    fontSize: 17,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
   addCatagory: {
-    marginTop: 25,
+    marginTop: 450,
     paddingVertical: 2,
     paddingHorizontal: 10,
     borderRadius: 50,

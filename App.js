@@ -20,11 +20,6 @@ export default function App() {
   const [recipeForm, setRecipeForm] = useState(false);
 
   const localDB = new PouchDB("catagories");
-  const remoteDB = new PouchDB("http://localhost:5984/docs");
-  const sync = localDB.sync(remoteDB, {
-    live: true,
-    retry: true,
-  });
 
   useEffect(() => {
     localDB
@@ -36,8 +31,6 @@ export default function App() {
         setCatagories(res.rows);
       })
       .catch((err) => console.log(err));
-    //localDB.info().then((info) => console.log(info));
-    //remoteDB.info().then((info) => console.log(info));
   });
 
   const findRecipes = (db) => {
