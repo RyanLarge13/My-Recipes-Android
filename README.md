@@ -3,7 +3,7 @@ React Native... Here I come again! This fullstack recipe mobile Android applicat
 
 ## About My Recipes
 Welcome to the source code for this amazing recipe making
-mobile application soon to be available on Android devices.
+mobile application ***soon to be available on Android devices***.
 
 This app was created using the amazing *React Native* framework.
 The user experience is met when the app opens and a user logs in. Using PouchDB
