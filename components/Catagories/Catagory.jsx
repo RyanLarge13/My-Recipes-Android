@@ -57,6 +57,7 @@ const Catagory = ({ catagory, filterRecipes, toggleView }) => {
 const styles = StyleSheet.create({
   container: {
     margin: 10,
+    marginVertical: 20,
     backgroundColor: "#fff",
     width: 175,
     height: 175,

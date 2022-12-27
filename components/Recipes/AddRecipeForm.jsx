@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { Camera, CameraType } from "expo-camera";
+import Toast from "react-native-toast-message";
 
 const AddRecipeForm = ({ onAddRecipe, catagory, closeForm, option }) => {
   const [title, setTitle] = useState("");
@@ -36,6 +37,7 @@ const AddRecipeForm = ({ onAddRecipe, catagory, closeForm, option }) => {
   };
 
   const sendDoc = () => {
+    if (title === "") return showToast();
     const newRecipe = {
       _id: title,
       Catagory: catagory,
@@ -50,17 +52,32 @@ const AddRecipeForm = ({ onAddRecipe, catagory, closeForm, option }) => {
     onAddRecipe(newRecipe);
   };
 
+  const showToast = () => {
+    Toast.show({
+      type: "error",
+      text1: "You must add a title",
+      text2: "It makes a much better experience! 😊",
+      position: "bottom",
+      bottomOffset: 10,
+    });
+  };
+
   return (
     <View style={styles.container}>
       <Text
         style={{
-          fontSize: 20,
+          fontSize: 15,
           textAlign: "center",
           width: "75%",
           alignSelf: "center",
+          backgroundColor: "#4cc9f0",
+          borderRadius: 50,
+          paddingVertical: 5,
+          paddingHorizontal: 10,
+          elevation: 10,
         }}
       >
-        What is your new recipe today?
+        Add Your Recipe!
       </Text>
       <Pressable style={styles.imageContainer} onPress={pickImage}>
         {image ? (
@@ -114,9 +131,13 @@ const AddRecipeForm = ({ onAddRecipe, catagory, closeForm, option }) => {
       <Pressable style={styles.submit} onPress={sendDoc}>
         <Text>Submit</Text>
       </Pressable>
-      {option ? <Pressable style={styles.submit} onPress={closeForm}>
-        <Text>Close</Text>
-      </Pressable> : ""}
+      {option ? (
+        <Pressable style={styles.submit} onPress={closeForm}>
+          <Text>Close</Text>
+        </Pressable>
+      ) : (
+        ""
+      )}
     </View>
   );
 };

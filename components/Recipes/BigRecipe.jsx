@@ -33,7 +33,7 @@ const BigRecipe = ({ onCloseClick, recipe, catagory }) => {
           position: "absolute",
           top: -30,
           alignSelf: "center",
-          elevation: 10
+          elevation: 10,
         }}
       />
       <Text style={styles.title}>{recipe.doc.Title}</Text>
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     margin: 15,
     borderRadius: 50,
     elevation: 15,
-    backgroundColor: "#fff",
+    backgroundColor: "#4cc9f0",
     justifyContent: "flex-start",
     alignItems: "center",
   },

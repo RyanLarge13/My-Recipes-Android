@@ -1,9 +1,8 @@
 import { View, StyleSheet, Pressable, Text } from "react-native";
 
-const Header = ({ name, showCatagoryComponent }) => {
+const Header = ({ showCatagoryComponent }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.name}>{name}</Text>
       <Pressable
         style={styles.catagoryButton}
         onPress={() => showCatagoryComponent(true)}
@@ -25,9 +24,6 @@ const styles = StyleSheet.create({
     elevation: 225,
     justifyContent: "center",
     alignItems: "center",
-  },
-  name: {
-    marginTop: "2.5%",
   },
   catagoryButton: {
     position: "absolute",

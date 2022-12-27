@@ -6,6 +6,7 @@ import PouchDB from "pouchdb-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-toast-message";
 import Header from "./components/Header";
+import Home from "./components/Home/Home";
 import CatagoryView from "./components/Catagories/CatagoryView";
 import AddRecipeForm from "./components/Recipes/AddRecipeForm";
 import Recipe from "./components/Recipes/Recipe";
@@ -63,19 +64,28 @@ export default function App() {
             textAlign: "center",
             marginBottom: 50,
             marginTop: 50,
+            paddingVertical: 10,
+            paddingHorizontal: 25,
+            borderRadius: 10,
+            backgroundColor: "#4cc9f0",
+            elevation: 10,
           }}
         >
           {title !== "" ? title : "Welcome!"}
         </Text>
         {!title ? (
-          <Text style={{ fontSize: 15, textAlign: "center" }}>
-            Select a catagory
-          </Text>
+          <Home />
         ) : (
           <View pointerEvents={catagoryComponent ? "none" : "auto"}>
             {recipes.length < 1 ? (
               <>
-                <Text style={{ fontSize: 20, textAlign: "center" }}>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    textAlign: "center",
+                    marginHorizontal: 25,
+                  }}
+                >
                   You have no recipes under this catagory.
                 </Text>
                 <AddRecipeForm
@@ -124,10 +134,7 @@ export default function App() {
           </View>
         )}
       </ScrollView>
-      <Header
-        name="Ryan"
-        showCatagoryComponent={(bool) => setCatagoryComponent(bool)}
-      />
+      <Header showCatagoryComponent={(bool) => setCatagoryComponent(bool)} />
       {catagoryComponent ? (
         <CatagoryView
           closeCatagoryView={(bool) => setCatagoryComponent(bool)}
