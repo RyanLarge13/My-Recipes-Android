@@ -146,6 +146,7 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 100,
     marginBottom: 50,
+    width: "95%"
   },
   imageContainer: {
     marginVertical: 25,

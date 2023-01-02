@@ -50,7 +50,7 @@ export default function App() {
 
   const findRecipesAndAdd = (recipe) => {
     const recipeDB = new PouchDB(recipe.Catagory);
-    recipeDB.put(recipe);
+    recipeDB.put(recipe).then((doc) => console.log(doc)).catch((err) => console.log(err));
     findRecipes(recipe.Catagory);
   };
 
@@ -168,4 +168,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#f72585",
     elevation: 5,
   },
+  scrollRecipes: {
+    width: "100%", 
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignItems: "center",
+  }
 });

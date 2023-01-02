@@ -4,13 +4,10 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import PouchDB from "pouchdb-react-native";
 
 const Catagory = ({ catagory, filterRecipes, toggleView }) => {
-  useEffect(() => {
-    // console.log(catagory);
-  }, []);
 
   const deleteCatagory = (id) => {
     const localDB = new PouchDB("catagories");
-    const recipeDB = new PouchDB(catagory);
+    const recipeDB = new PouchDB(id);
 
     localDB
       .get(id)

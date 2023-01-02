@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     justifyContent: "center",
     alignItems: "center",
+    marginHorizontal: 25,
   },
   title: {
     textAlign: "center",
