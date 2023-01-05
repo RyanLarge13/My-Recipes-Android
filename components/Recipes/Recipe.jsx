@@ -29,9 +29,12 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     backgroundColor: "#fff",
     elevation: 5,
+    flexDirection: "row",
+    flexWrap: "wrap",
     justifyContent: "center",
     alignItems: "center",
-    marginHorizontal: 25,
+    marginVertical: 20,
+    marginHorizontal: 5,
   },
   title: {
     textAlign: "center",
