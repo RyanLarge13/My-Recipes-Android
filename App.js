@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { StyleSheet, ScrollView, View, Text, Pressable } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import PouchDB from "pouchdb-react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-toast-message";
 import Header from "./components/Header";
 import Home from "./components/Home/Home";
@@ -50,7 +49,10 @@ export default function App() {
 
   const findRecipesAndAdd = (recipe) => {
     const recipeDB = new PouchDB(recipe.Catagory);
-    recipeDB.put(recipe).then((doc) => console.log(doc)).catch((err) => console.log(err));
+    recipeDB
+      .put(recipe)
+      .then((doc) => console.log(doc))
+      .catch((err) => console.log(err));
     findRecipes(recipe.Catagory);
   };
 
@@ -169,10 +171,10 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   scrollRecipes: {
-    width: "100%", 
+    width: "100%",
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
     alignItems: "center",
-  }
+  },
 });
